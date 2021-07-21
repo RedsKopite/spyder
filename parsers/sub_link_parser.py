@@ -17,15 +17,23 @@ class SubLinkParser(HTMLParser, ABC):
         super().__init__()
 
         html = requests.get(sub_link).text
-        self.feed(str(BeautifulSoup(html, "lxml").find_all(config["tag"], **config["attrs"])))
+        tag_list = BeautifulSoup(html, "lxml").find_all(config["tag"], config["attrs"])
+        self.ignore = len(tag_list) == 0
+        self.feed(f"{tag_list}")
 
         pp.pprint(self.likeDataList)
         pp.pprint(self.columnDataList)
 
     def handle_starttag(self, tag, attrs):
+        if self.ignore:
+            return
+
         HANDLE_STARTTAG_DICT[self.config_number](attrs, self.likeDataList)
 
     def handle_data(self, data):
+        if self.ignore:
+            return
+
         data = HANDLE_DATA_DICT[self.config_number](data)
         if data is not None:
             self.columnDataList.append(data)

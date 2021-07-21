@@ -1,14 +1,14 @@
 import os
 import sys
-path = os.path.dirname(__file__)
-sys.path.append(path)
-
 import pprint
 import pandas as pd
 from parsers.link_parser import LinkParser
 from parsers.sub_link_parser import SubLinkParser
 # from multiprocessing import Pool
 from config import *
+
+path = os.path.dirname(__file__)
+sys.path.append(path)
 
 pp = pprint.PrettyPrinter(width=41, compact=True)
 COLUMN_KEY_DICT = {
@@ -22,30 +22,34 @@ COLUMN_KEY_DICT = {
     7: 'coins',
     8: 'collect',
     9: 'share',
-    10:'total_time'
+    10: 'total_time'
 }
 
 
-def sub_link_spider(sub_link, config, column_dict):
+def sub_link_spider(sub_link, config, column_dict, start_index):
     sub_link_parser = SubLinkParser(sub_link, config)
 
-    column_dict[5].append(sub_link)
-    column_dict[6].append(sub_link_parser.columnDataList[0])
-    column_dict[7].append(sub_link_parser.columnDataList[1])
-    column_dict[8].append(sub_link_parser.columnDataList[2])
-    column_dict[9].append(sub_link_parser.columnDataList[3])
+    for idx, data in enumerate(sub_link_parser.columnDataList):
+        if len(column_dict) <= start_index + idx:
+            return 0
+
+        column_dict[start_index + idx].append(data)
+
+    return len(sub_link_parser.columnDataList)
 
 
 def run_spider(link):
     link_parser = LinkParser(link)
 
-    column_dict = {i: [] for i in range(10)}
+    column_dict = {i: [] for i in range(11)}
     [column_dict[i % 5].append(v) for i, v in enumerate(link_parser.columnDataList)]
 
-    for config in ANALYSIS_LIST:
-        # sub_link_pool = Pool(10)
-        for sub_link in link_parser.subLinkList:
-            sub_link_spider(sub_link, config, column_dict)
+    # sub_link_pool = Pool(10)
+    for sub_link in link_parser.subLinkList:
+        start_index = 6
+        column_dict[5].append(sub_link)
+        for config in ANALYSIS_LIST:
+            start_index += sub_link_spider(sub_link, config, column_dict, start_index)
 
     return {COLUMN_KEY_DICT[k]: v for k, v in column_dict.items()}
 
