@@ -3,7 +3,7 @@ import pprint
 from html.parser import HTMLParser
 from abc import ABC
 from bs4 import BeautifulSoup
-from parser.handles import HANDLE_DATA_DICT, HANDLE_STARTTAG_DICT
+from parsers.handles import HANDLE_DATA_DICT, HANDLE_STARTTAG_DICT
 
 pp = pprint.PrettyPrinter(width=41, compact=True)
 

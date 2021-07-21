@@ -1,6 +1,12 @@
+import os
+import sys
+path = os.path.dirname(__file__)
+sys.path.append(path)
+
 import pprint
-from parser.link_parser import LinkParser
-from parser.sub_link_parser import SubLinkParser
+import pandas as pd
+from parsers.link_parser import LinkParser
+from parsers.sub_link_parser import SubLinkParser
 # from multiprocessing import Pool
 from config import *
 
@@ -15,7 +21,8 @@ COLUMN_KEY_DICT = {
     6: 'likes',
     7: 'coins',
     8: 'collect',
-    9: 'share'
+    9: 'share',
+    10:'total_time'
 }
 
 
@@ -47,5 +54,6 @@ if __name__ == "__main__":
     link_result = run_spider(
         "https://www.bilibili.com/v/popular/rank/game"
     )
+    df = pd.DataFrame(link_result)
     with open("./test.txt", "w") as f:
         f.write("\n".join([f"{k}: {', '.join(v)}" for k, v in link_result.items()]))
