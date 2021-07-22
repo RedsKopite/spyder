@@ -8,9 +8,9 @@ ANALYSIS_LIST = [
     },
     {
         "number": "002",
-        "tag": "span",
+        "tag": "li",
         "attrs": {
-            "class": "bilibili-player-video-time-total"
+            "class": "tag"
         }
     }
 ]

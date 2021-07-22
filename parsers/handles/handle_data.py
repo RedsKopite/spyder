@@ -4,4 +4,5 @@ def handle_data_001(data):
 
 
 def handle_data_002(data):
-    return data
+    if data not in [", ", " ", "[", "]"]:
+        return data.strip()

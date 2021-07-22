@@ -5,4 +5,5 @@ def handle_starttag_001(attrs, like_data_list):
 
 
 def handle_starttag_002(attrs, like_data_list):
-    print(attrs, like_data_list)
+    pass
+    # print(attrs, like_data_list)

@@ -35,5 +35,7 @@ class SubLinkParser(HTMLParser, ABC):
             return
 
         data = HANDLE_DATA_DICT[self.config_number](data)
-        if data is not None:
+        if data is not None and data not in self.columnDataList:
             self.columnDataList.append(data)
+    
+

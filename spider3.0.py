@@ -1,5 +1,7 @@
 import os
 import sys
+path = os.path.dirname(__file__)
+sys.path.append(path)
 import pprint
 import pandas as pd
 from parsers.link_parser import LinkParser
@@ -7,8 +9,7 @@ from parsers.sub_link_parser import SubLinkParser
 # from multiprocessing import Pool
 from config import *
 
-path = os.path.dirname(__file__)
-sys.path.append(path)
+
 
 pp = pprint.PrettyPrinter(width=41, compact=True)
 COLUMN_KEY_DICT = {
@@ -22,7 +23,7 @@ COLUMN_KEY_DICT = {
     7: 'coins',
     8: 'collect',
     9: 'share',
-    10: 'total_time'
+    10: 'tags'
 }
 
 
@@ -48,7 +49,7 @@ def run_spider(link):
     for sub_link in link_parser.subLinkList:
         start_index = 6
         column_dict[5].append(sub_link)
-        for config in ANALYSIS_LIST:
+        for config in ANALYSIS_LIST:  #loop each dict
             start_index += sub_link_spider(sub_link, config, column_dict, start_index)
 
     return {COLUMN_KEY_DICT[k]: v for k, v in column_dict.items()}
